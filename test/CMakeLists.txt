@@ -1,0 +1,2 @@
+add_executable(testlogger testlogger.cpp)
+target_link_libraries(testlogger cppweb)
