@@ -1,2 +1,3 @@
 add_library(cppweb STATIC
-    Logger.cpp)
+    Logger.cpp
+    InetAddress.cpp)
