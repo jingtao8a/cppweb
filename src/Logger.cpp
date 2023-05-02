@@ -36,7 +36,7 @@ static int timestamp(char *data, size_t len) {//获取精确的UTC时间
 
 void Logger::log_base(const char *file, int line, 
                 int level, int to_abort, const char *fmt, ...){
-    if (m_level < level) {
+    if (m_level > level) {
         return;
     }
     char data[MAXLINE];
