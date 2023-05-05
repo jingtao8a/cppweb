@@ -1,6 +1,7 @@
 #ifndef CPPWEB_EVENTLOOPTHREAD_HPP
 #define CPPWEB_EVENTLOOPTHREAD_HPP
 
+#include <atomic>
 #include "nocopyable.hpp"
 #include <thread>
 #include <condition_variable>
@@ -25,7 +26,7 @@ private:
     std::condition_variable m_cond;
     std::mutex m_mutex;
     bool m_started;
-    EventLoop * m_loop;
+    EventLoop* m_loop;
 };
 
 }

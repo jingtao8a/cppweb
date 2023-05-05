@@ -30,7 +30,6 @@ IgnoreSigPipe ignore;//利用构造函数，在main函数之前执行
 EventLoop::EventLoop() :
     m_tid(gettid()),
     m_quit(false),
-    m_doingPendingTasks(false),
     m_poller(this),
     m_timerQueue(this),
     m_wakeupFd(::eventfd(0, EFD_CLOEXEC | EFD_NONBLOCK)),
@@ -60,6 +59,7 @@ void EventLoop::wakeup() {
 }
 
 void EventLoop::handleRead() {
+    assertInLoopThread();
     uint64_t one;
     size_t n = ::read(m_wakeupFd, &one, sizeof(one));
     if (n != sizeof(one)) {
@@ -70,30 +70,23 @@ void EventLoop::handleRead() {
 void EventLoop::loop() {
     assertInLoopThread();
     TRACE(logger, "EventLoop %p polling", this);
-    m_quit = false;
     while (!m_quit) {
         m_activeChannels.clear();
         m_poller.poll(m_activeChannels);
         for (auto channel : m_activeChannels) {
             channel->handleEvents();
         }
-        doPendingTasks();
+        assertInLoopThread();
+        std::vector<std::function<void()> > tasks;
+        {
+            std::lock_guard<std::mutex> guard(m_mutex);
+            tasks.swap(m_pendingTasks);
+        }
+        for (auto& task : tasks) {
+            task();
+        }
     }
     TRACE(logger, "EventLoop %p quit", this);
-}
-
-void EventLoop::doPendingTasks() {
-    assertInLoopThread();
-    std::vector<std::function<void()> > tasks;
-    {
-        std::lock_guard<std::mutex> guard(m_mutex);
-        tasks.swap(m_pendingTasks);
-    }
-    m_doingPendingTasks = true;
-    for (auto& task : tasks) {
-        task();
-    }
-    m_doingPendingTasks = false;
 }
 
 
@@ -109,7 +102,6 @@ void EventLoop::updateChannel(Channel *channel) {
     assertInLoopThread();
     m_poller.updateChannel(channel);
 }
-
 
 void EventLoop::runInLoop(const std::function<void()>& task) {
     if (isInLoopThread()) {

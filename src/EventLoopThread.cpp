@@ -1,8 +1,13 @@
 #include "EventLoopThread.hpp"
 #include "EventLoop.hpp"
 #include <assert.h>
+#include "Logger.hpp"
+#include "Singleton.hpp"
+
 
 namespace CPPWEB {
+
+static auto& logger = Singleton<Logger>::GetInstance();
 
 EventLoopThread::~EventLoopThread() {
     if (m_started) {

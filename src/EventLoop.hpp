@@ -31,10 +31,9 @@ public:
     Timer* runAt(TimePoint when, std::function<void()> cb);
     Timer* runEvery(Nanoseconds interval, std::function<void()> cb);
     Timer* runAfter(Nanoseconds interval, std::function<void()> cb);
-    void cancelTimer(Timer* timer);
 
+    void cancelTimer(Timer* timer);
 private:
-    void doPendingTasks();
     void handleRead();
 
 private:
@@ -46,7 +45,6 @@ private:
 
     std::mutex m_mutex;
     std::vector<std::function<void()> > m_pendingTasks;
-    bool m_doingPendingTasks;
 
     TimerQueue m_timerQueue;
 
