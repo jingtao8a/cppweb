@@ -6,3 +6,6 @@ target_link_libraries(testInetAddress cppweb)
 
 add_executable(testthreadpool testthreadpool.cpp)
 target_link_libraries(testthreadpool cppweb)
+
+add_executable(testTimerLoop testTimerLoop.cpp)
+target_link_libraries(testTimerLoop cppweb)

@@ -5,7 +5,7 @@
 
 namespace CPPWEB {
 
-auto& logger = Singleton<Logger>::GetInstance();
+static auto& logger = Singleton<Logger>::GetInstance();
 
 ThreadPool::ThreadPool(size_t numThread, size_t maxQueueSize, const std::function<void(size_t index)>& cb) :
     m_maxQueueSize(maxQueueSize), 

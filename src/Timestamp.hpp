@@ -5,17 +5,20 @@
 
 namespace CPPWEB {
 
+typedef std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds> TimePoint;//时间点
+typedef std::chrono::nanoseconds Nanoseconds;//计量单位 纳秒
+
 namespace clock {
 
-inline std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds> now() {
+inline TimePoint now() {
     return std::chrono::system_clock::now();
 }
 
-inline std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds> nowAfter(std::chrono::nanoseconds interval) {
+inline TimePoint nowAfter(Nanoseconds interval) {
     return now() + interval;
 }
 
-inline std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds> nowBefore(std::chrono::nanoseconds interval) {
+inline TimePoint nowBefore(Nanoseconds interval) {
     return now() - interval;
 }
 

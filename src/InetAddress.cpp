@@ -6,7 +6,7 @@
 
 namespace CPPWEB {
 
-auto& logger = Singleton<Logger>::GetInstance();
+static auto& logger = Singleton<Logger>::GetInstance();
 
 InetAddress::InetAddress(uint16_t port, bool loopback) {
     bzero(&m_addr, sizeof(m_addr));
