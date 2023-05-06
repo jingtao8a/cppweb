@@ -6,4 +6,5 @@ add_library(cppweb STATIC
     Channel.cpp
     Epoller.cpp
     EventLoop.cpp
-    EventLoopThread.cpp)
+    EventLoopThread.cpp
+    Buffer.cpp)

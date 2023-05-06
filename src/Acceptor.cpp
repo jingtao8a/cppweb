@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include "Logger.hpp"
 #include "Singleton.hpp"
+#include "EventLoop.hpp"
 
 namespace CPPWEB {
 
@@ -38,6 +39,7 @@ Acceptor::Acceptor(EventLoop* loop, const InetAddress& localAddress) :
 }
 
 void Acceptor::listen() {
+    m_loop->assertInLoopThread();
     int ret = ::listen(m_acceptFd, SOMAXCONN);
     if (ret == -1) {
         SYSFATAL(logger, "Acceptor::listen()");

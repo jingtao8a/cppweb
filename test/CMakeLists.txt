@@ -9,3 +9,6 @@ target_link_libraries(testthreadpool cppweb)
 
 add_executable(testTimerLoop testTimerLoop.cpp)
 target_link_libraries(testTimerLoop cppweb)
+
+add_executable(testBuffer testBuffer.cpp)
+target_link_libraries(testBuffer cppweb)

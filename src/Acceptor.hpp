@@ -9,7 +9,6 @@
 namespace CPPWEB {
 
 class EventLoop;
-class Channel;
 
 class Acceptor: public nocopyable {
 public:
@@ -25,12 +24,14 @@ public:
 private:
     void handleRead();
 private:
-    bool m_listening;
+    
     EventLoop *m_loop;
     InetAddress m_localAddress;
-    NewConnectioCallback m_newConnectionCallback;
     const int m_acceptFd;
     Channel m_acceptChannel;
+    bool m_listening;
+    
+    NewConnectioCallback m_newConnectionCallback;
 };
 
 }
