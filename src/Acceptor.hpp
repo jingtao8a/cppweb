@@ -3,8 +3,8 @@
 
 #include "nocopyable.hpp"
 #include "InetAddress.hpp"
-#include <functional>
 #include "Channel.hpp"
+#include "Callbacks.hpp"
 
 namespace CPPWEB {
 
@@ -12,8 +12,6 @@ class EventLoop;
 
 class Acceptor: public nocopyable {
 public:
-    typedef std::function<void(int sockfd, const InetAddress& local, const InetAddress& peer)> NewConnectioCallback;
-
     Acceptor(EventLoop* loop, const InetAddress& localAddress);
     ~Acceptor();
     bool isListening() const { return m_listening; }
@@ -24,12 +22,12 @@ public:
 private:
     void handleRead();
 private:
-    
+    bool m_listening;
+
     EventLoop *m_loop;
-    InetAddress m_localAddress;
+    const InetAddress m_localAddress;
     const int m_acceptFd;
     Channel m_acceptChannel;
-    bool m_listening;
     
     NewConnectioCallback m_newConnectionCallback;
 };

@@ -3,6 +3,7 @@
 
 #include <functional>
 #include <sys/epoll.h>
+#include <memory>
 #include "nocopyable.hpp"
 
 namespace CPPWEB {
@@ -36,7 +37,7 @@ public:
 private:
     void update();
     void handleEventsWithGuard();
-
+    void tie(const std::shared_ptr<void>& obj);
 private:
     std::function<void()> m_readCallback;
     std::function<void()> m_writeCallback;
@@ -47,8 +48,11 @@ private:
     unsigned m_events;
     unsigned m_revents;
     EventLoop* m_loop;
-
+    
+    bool m_tied;
+    std::weak_ptr<void> m_tie;
 public:
+    
     bool polling;
 };
 

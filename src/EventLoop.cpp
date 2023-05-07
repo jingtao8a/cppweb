@@ -107,12 +107,16 @@ void EventLoop::runInLoop(const std::function<void()>& task) {
     if (isInLoopThread()) {
         task();
     } else {
-        {
-            std::lock_guard<std::mutex> guard(m_mutex);
-            m_pendingTasks.push_back(task);
-        }
-        wakeup();
+        queueInLoop(task);
     }
+}
+
+void EventLoop::queueInLoop(const std::function<void()>& task) {
+    {
+        std::lock_guard<std::mutex> guard(m_mutex);
+        m_pendingTasks.push_back(task);
+    }
+    wakeup();
 }
 
 void EventLoop::assertInLoopThread() {

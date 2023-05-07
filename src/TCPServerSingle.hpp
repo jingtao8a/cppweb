@@ -1,41 +1,37 @@
 #ifndef CPPWEB_TCPSERVERSINGLE_HPP 
 #define CPPWEB_TCPSERVERSINGLE_HPP
 
-#include "nocopyable.hpp"
-#include <functional>
 #include <unordered_set>
+#include "nocopyable.hpp"
 #include "Acceptor.hpp"
-#include "TCPConnection.hpp"
 
 namespace CPPWEB {
-
-class TCPConnection;
-class Buffer;
-
 
 class TCPServerSingle: public nocopyable {
 public:
     TCPServerSingle(EventLoop* loop, const InetAddress& local);
 
-    void setConnectionCallback(const std::function<void(const TCPConnectionPtr&)>& cb) { m_connectionCallback = cb; }
-    void setMessageCallback(const std::function<void(const TCPConnectionPtr&, Buffer&)>& cb) { m_messageCallback = cb; }
-    void setWriteCompleteCallback(const std::function<void(const TCPConnectionPtr&)>& cb) { m_writeCompleteCallback = cb; }
+    void setConnectionCallback(const std::function<void(const TCPConnectionPtr&)>& cb) { m_connectionCallback = cb; }//自己使用的回调函数
+    void setMessageCallback(const std::function<void(const TCPConnectionPtr&, Buffer&)>& cb) { m_messageCallback = cb; }//TCPconnection使用的回调函数
+    void setWriteCompleteCallback(const std::function<void(const TCPConnectionPtr&)>& cb) { m_writeCompleteCallback = cb; }//TCPConnection使用的回调函数
 
     void start();
 
 private:
-    void newConnetction(int connfd, const InetAddress& local, const InetAddress& peer);
-    void closeConnection(const TCPConnectionPtr& conn);
+    void newConnetction(int connfd, const InetAddress& local, const InetAddress& peer);//作为Acceptor的回调函数
+    void closeConnection(const TCPConnectionPtr& conn);//作为TCPConnection的回调函数
+
 private:
-    std::function<void(const TCPConnectionPtr&)> m_connectionCallback;
-    std::function<void(const TCPConnectionPtr&, Buffer&)> m_messageCallback;
-    std::function<void(const TCPConnectionPtr&)> m_writeCompleteCallback;
+    MessageCallback m_messageCallback;
+    WriteCompleteCallback m_writeCompleteCallback;
+    ConnectionCallback m_connectionCallback;
 
     std::unordered_set<TCPConnectionPtr> m_connectionSet;
     EventLoop* m_loop;
     Acceptor m_acceptor;
-
 };
+
+
 
 }
 

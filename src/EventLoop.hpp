@@ -19,7 +19,7 @@ public:
     void quit();
 
     void runInLoop(const std::function<void()>& task);
-    
+    void queueInLoop(const std::function<void()>& task);
     void wakeup();
 
     void updateChannel(Channel *channel);

@@ -11,7 +11,7 @@ static auto& logger = Singleton<Logger>::GetInstance();
 int createSocket() {
     int ret = ::socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK | SOCK_CLOEXEC, 0);
     if (ret == -1) {
-        SYSFATAL(logger, "Acceptor::socket()");
+        SYSFATAL(logger, "Acceptor::socket() || Connector::socket()");
     }
     return ret;
 }

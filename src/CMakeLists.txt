@@ -7,4 +7,10 @@ add_library(cppweb STATIC
     Epoller.cpp
     EventLoop.cpp
     EventLoopThread.cpp
-    Buffer.cpp)
+    Buffer.cpp
+    TCPConnection.cpp
+    TCPServerSingle.cpp
+    Acceptor.cpp
+    Callbacks.cpp
+    TCPClient.cpp
+    Connector.cpp)
