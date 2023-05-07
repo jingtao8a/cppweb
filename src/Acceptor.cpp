@@ -20,8 +20,7 @@ Acceptor::Acceptor(EventLoop* loop, const InetAddress& localAddress) :
     m_loop(loop),
     m_localAddress(localAddress),
     m_acceptFd(createSocket()),
-    m_acceptChannel(loop, m_acceptFd),
-    m_listening(false) {
+    m_acceptChannel(loop, m_acceptFd) {
     
     int on = 1;
     int ret = ::setsockopt(m_acceptFd, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(on));//用于对TCP套接字处于TIME_WAIT状态下的socket，才可以重复绑定使用
@@ -70,13 +69,10 @@ void Acceptor::handleRead() {
         }
     }
 
-    if (m_newConnectionCallback) {
-        InetAddress peer;
-        peer.setAddress(addr);
-        m_newConnectionCallback(sockfd, m_localAddress, peer);
-    } else {
-        ::close(sockfd);
-    }
+    InetAddress peer;
+    peer.setAddress(addr);
+    m_newConnectionCallback(sockfd, m_localAddress, peer);
+
 }
 
 

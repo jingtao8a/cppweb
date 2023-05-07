@@ -18,9 +18,8 @@ enum ConnectionState {
     kDisconnected,
 };
 
-class EventLoop;
 
-class TCPConnection: public nocopyable, public std::enable_shared_from_this<TCPConnection>{
+class TCPConnection: public nocopyable, public std::enable_shared_from_this<TCPConnection> {
 
 public:
     TCPConnection(EventLoop* loop, int sockfd, const InetAddress& local, const InetAddress& peer);

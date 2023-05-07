@@ -14,7 +14,6 @@ class Acceptor: public nocopyable {
 public:
     Acceptor(EventLoop* loop, const InetAddress& localAddress);
     ~Acceptor();
-    bool isListening() const { return m_listening; }
 
     void listen();
     void setNewConnectionCallback(const NewConnectioCallback& cb) { m_newConnectionCallback = cb; }
@@ -22,8 +21,6 @@ public:
 private:
     void handleRead();
 private:
-    bool m_listening;
-
     EventLoop *m_loop;
     const InetAddress m_localAddress;
     const int m_acceptFd;
