@@ -12,7 +12,7 @@ class UserInput: public CPPWEB::nocopyable {
 public:
     UserInput(const CPPWEB::TCPConnectionPtr& conn):
         m_conn(conn) {
-        
+        m_conn->setMessageCallback(std::bind(&UserInput::onMessage, this, CPPWEB::_1, CPPWEB::_2));
     }
 
     void onMessage(const CPPWEB::TCPConnectionPtr& conn, CPPWEB::Buffer& buffer) {
@@ -35,7 +35,7 @@ public:
     EchoBench(CPPWEB::EventLoop* loop, const CPPWEB::InetAddress& addr) :
         m_loop(loop),
         m_client(loop, addr) {
-            
+        
         m_client.setConnectionCallback(std::bind(&EchoBench::onConnection, this, CPPWEB::_1));
     }
 
@@ -44,15 +44,11 @@ public:
     }
     void onConnection(const CPPWEB::TCPConnectionPtr& conn) {
         INFO(logger, "connection %s is [%s]", conn->name().c_str(), conn->isConnected() ? "up" : "down");
-        if (conn->isConnected()) {
-            auto th = std::thread([conn]() {
-                UserInput user(conn);
-                user.run();
-            });
-            th.detach();
-        } else {
-            m_loop->quit();
-        }
+        auto th = std::thread([conn]() {
+            UserInput user(conn);
+            user.run();
+        });
+        th.detach();
     }
 private:
     CPPWEB::EventLoop *m_loop;

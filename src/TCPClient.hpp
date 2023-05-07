@@ -15,9 +15,6 @@ public:
     void setConnectionCallback(const std::function<void(const TCPConnectionPtr&)>& cb) { m_connectionCallback = cb; }
     void setMessageCallback(const std::function<void(const TCPConnectionPtr&, Buffer&)>& cb) { m_messageCallback = cb; }
     void setWriteCompleteCallback(const std::function<void(const TCPConnectionPtr&)>& cb) { m_writeCompleteCallback = cb; }
-    void setErrorCallback(const std::function<void()>& cb) {
-        m_connector->setErrorCallback(cb);
-    }
 
 private:
     void retry();
@@ -35,7 +32,7 @@ private:
     
     TCPConnectionPtr m_connection;
     EventLoop* m_loop;
-    std::unique_ptr<Connector> m_connector;
+    Connector m_connector;
 };
 
 }

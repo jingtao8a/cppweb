@@ -38,6 +38,10 @@ Acceptor::Acceptor(EventLoop* loop, const InetAddress& localAddress) :
     }
 }
 
+Acceptor::~Acceptor() {
+    ::close(m_acceptFd);
+}
+
 void Acceptor::listen() {
     m_loop->assertInLoopThread();
     int ret = ::listen(m_acceptFd, SOMAXCONN);
@@ -75,8 +79,6 @@ void Acceptor::handleRead() {
     }
 }
 
-Acceptor::~Acceptor() {
-    ::close(m_acceptFd);
-}
+
 
 }

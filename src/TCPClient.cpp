@@ -13,11 +13,11 @@ TCPClient::TCPClient(EventLoop* loop, const InetAddress& peer):
     m_peer(peer),
     m_connected(false),
     m_retryTimer(nullptr),
-    m_connector(new Connector(loop, peer)),
+    m_connector(loop, peer),
     m_connectionCallback(defaultConnectionCallback),
     m_messageCallback(defaultMessageCallback) {
 
-    m_connector->setNewConnectionCallback(std::bind(&TCPClient::newConnection, this, _1, _2, _3));
+    m_connector.setNewConnectionCallback(std::bind(&TCPClient::newConnection, this, _1, _2, _3));
 }
 
 TCPClient::~TCPClient() {
@@ -31,7 +31,7 @@ TCPClient::~TCPClient() {
 
 void TCPClient::start() {
     m_loop->assertInLoopThread();
-    m_connector->start();
+    m_connector.start();//发起连接事件
     m_retryTimer = m_loop->runEvery(Nanoseconds(3000000000), [this]() {this->retry();});
 }
 
@@ -40,16 +40,13 @@ void TCPClient::retry() {
     if (m_connected) {
         return;
     }
-
     WARN(logger, "TCPClient::retry() reconnect %s...", m_peer.toIpPort().c_str());
-    m_connector = std::make_unique<Connector>(m_loop, m_peer);
-    m_connector->setNewConnectionCallback(std::bind(&TCPClient::newConnection, this, _1, _2, _3));
-    m_connector->start();
+    m_connector.start();//发起连接事件
 }
 
 void TCPClient::newConnection(int connfd, const InetAddress& local, const InetAddress& peer) {
     m_loop->assertInLoopThread();
-    m_loop->cancelTimer(m_retryTimer);
+    m_loop->cancelTimer(m_retryTimer);//连接成功，取消retry定时器（3s)
     m_retryTimer = nullptr;
     m_connected = true;
     m_connection = std::make_shared<TCPConnection>(m_loop, connfd, local, peer);
@@ -66,7 +63,9 @@ void TCPClient::closeConnection(const TCPConnectionPtr& conn) {
     m_loop->assertInLoopThread();
     assert(m_connection != nullptr);
     m_connection.reset();
-    m_connectionCallback(conn);
+    if (m_connectionCallback) {
+        m_connectionCallback(conn);
+    }
 }
 
 }

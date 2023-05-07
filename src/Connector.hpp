@@ -17,22 +17,16 @@ public:
 
     void setNewConnectionCallback(const NewConnectioCallback& cb) { m_newConnectionCallback = cb; }
 
-    void setErrorCallback(const std::function<void()>& cb) { m_errorCallback = cb; }
-
 private:
     void handleWrite();
 
 private:
-    bool m_connected;
-    bool m_started;
-
     EventLoop* m_loop;
     const InetAddress m_peer;
     const int m_sockfd;
     Channel m_channel;
     
     NewConnectioCallback m_newConnectionCallback;
-    std::function<void()> m_errorCallback;
 };
 
 }

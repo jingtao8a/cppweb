@@ -58,8 +58,7 @@ void TCPConnection::send(const char* data, size_t len) {
 }
 
 
-void TCPConnection::sendInLoop(const std::string& message)
-{
+void TCPConnection::sendInLoop(const std::string& message) {
     sendInLoop(message.data(), message.size());
 }
 
