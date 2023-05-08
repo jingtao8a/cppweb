@@ -12,10 +12,10 @@
 namespace CPPWEB {
 
 enum ConnectionState {
-    kConnecting,
-    kConnected,
-    kDisconnecting,
-    kDisconnected,
+    kConnecting,//等待连接
+    kConnected,//连接建立
+    kDisconnecting,//半连接状态
+    kDisconnected,//连接关闭
 };
 
 

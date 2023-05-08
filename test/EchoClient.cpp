@@ -44,12 +44,17 @@ public:
     }
     void onConnection(const CPPWEB::TCPConnectionPtr& conn) {
         INFO(logger, "connection %s is [%s]", conn->name().c_str(), conn->isConnected() ? "up" : "down");
-        auto th = std::thread([conn]() {
-            UserInput user(conn);
-            user.run();
-        });
-        th.detach();
+        if (!conn->isDisconnected()) {
+            auto th = std::thread([conn]() {
+                UserInput user(conn);
+                user.run();
+            });
+            th.detach();
+        } else {
+            m_loop->quit();
+        }
     }
+
 private:
     CPPWEB::EventLoop *m_loop;
     CPPWEB::TCPClient m_client;

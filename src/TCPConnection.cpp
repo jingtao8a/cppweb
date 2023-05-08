@@ -37,6 +37,7 @@ void TCPConnection::connectEstablished() {
     m_loop->assertInLoopThread();
     assert(m_state == kConnecting);
     m_state = kConnected;
+    m_channel.tie(shared_from_this());
     m_channel.enableRead();
 }
 
@@ -63,25 +64,24 @@ void TCPConnection::sendInLoop(const std::string& message) {
 }
 
 void TCPConnection::sendInLoop(const char* data, size_t len) {
+    m_loop->assertInLoopThread();
     if (m_state == kDisconnected) {
         WARN(logger, "TCPConnection::sendInLoop() disconnected, give up read");
+        return;
     }
     ssize_t n = 0;
     size_t remain = len;
     bool falutError = false;
-    if (!m_channel.isWriting()) {
-        //首次进行发送
+    if (!m_channel.isWriting()) {//如果没有在等待EPOLL_OUT事件
         assert(m_outputBuffer.readableBytes() == 0);
-        n = ::write(m_sockfd, data, len);//注意m_sockfd为非阻塞模式，如果TCP写缓冲区满会直接返回0或-1 EAGAIN
+        n = ::write(m_sockfd, data, len);//注意m_sockfd为非阻塞模式，如果TCP写缓冲区满会直接返回-1 EAGAIN ....
         if (n == -1) {
-            if (errno != EAGAIN) {
+            if (!(errno == EAGAIN || errno == EWOULDBLOCK || errno == EINTR)) {
                 SYSERR(logger, "TCPConnection::write()");
-                if (errno == EPIPE || errno == ECONNRESET) {
-                    falutError = true;//对方连接已经关闭
-                }
+                falutError = true;
             }
             n = 0;
-        } else {
+        } else {//n >= 0
             remain -= static_cast<size_t>(n);
             if (remain == 0 && m_writeCompleteCallback) {//发送完成
                 m_loop->queueInLoop(std::bind(m_writeCompleteCallback, shared_from_this()));
@@ -89,8 +89,8 @@ void TCPConnection::sendInLoop(const char* data, size_t len) {
         }
     }
 
-    if (!falutError && remain > 0) {//还未将数据发完，且连接正常
-        if (m_highWaterMarkCallback) {
+    if (!falutError && remain > 0) {//还未将数据发完，且未出错
+        if (m_highWaterMarkCallback) {//？？？？？？？？？？？？？？
             size_t oldLen = m_outputBuffer.readableBytes();
             size_t newLen = oldLen + remain;
             if (oldLen < m_highWaterMark && newLen >= m_highWaterMark) {
@@ -178,11 +178,11 @@ void TCPConnection::handleWrite() {
     ssize_t n = ::write(m_sockfd, m_outputBuffer.peek(), m_outputBuffer.readableBytes());
     if (n == -1) {//因为是由epoll_wait唤醒，说明发送缓存是有空间，正常情况都可以发送出数据
         SYSERR(logger, "TCPConnection::write()");
-    } else {
+    } else {//n > 0
         m_outputBuffer.retrieve(static_cast<size_t>(n));
         if (m_outputBuffer.readableBytes() == 0) {//已经发送完毕了
             m_channel.disableWrite();//取消写事件
-            if (m_state == kDisconnecting) {
+            if (m_state == kDisconnecting) {//表示已经调用了shutdown，但是由于还未写完数据，还没关闭写端
                 shutdownInLoop();//关闭写操作
             }
             if (m_writeCompleteCallback) {

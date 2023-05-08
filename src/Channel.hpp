@@ -33,11 +33,11 @@ public:
     void disableAll() { m_events = 0; update(); }
 
     void handleEvents();
-
+    void tie(const std::shared_ptr<void>& obj);
 private:
     void update();
     void handleEventsWithGuard();
-    void tie(const std::shared_ptr<void>& obj);
+    
 private:
     std::function<void()> m_readCallback;
     std::function<void()> m_writeCallback;

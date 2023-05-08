@@ -4,6 +4,7 @@
 #include "Connector.hpp"
 #include "TCPConnection.hpp"
 #include "Timer.hpp"
+#include "Callbacks.hpp"
 
 namespace CPPWEB {
 class TCPClient: public nocopyable {
@@ -12,9 +13,9 @@ public:
     ~TCPClient();
 
     void start();
-    void setConnectionCallback(const std::function<void(const TCPConnectionPtr&)>& cb) { m_connectionCallback = cb; }
-    void setMessageCallback(const std::function<void(const TCPConnectionPtr&, Buffer&)>& cb) { m_messageCallback = cb; }
-    void setWriteCompleteCallback(const std::function<void(const TCPConnectionPtr&)>& cb) { m_writeCompleteCallback = cb; }
+    void setConnectionCallback(const ConnectionCallback& cb) { m_connectionCallback = cb; }
+    void setMessageCallback(const MessageCallback& cb) { m_messageCallback = cb; }
+    void setWriteCompleteCallback(const WriteCompleteCallback& cb) { m_writeCompleteCallback = cb; }
 
 private:
     void retry();

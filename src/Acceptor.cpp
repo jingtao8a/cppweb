@@ -35,9 +35,11 @@ Acceptor::Acceptor(EventLoop* loop, const InetAddress& localAddress) :
     if (ret == -1) {
         SYSFATAL(logger, "Acceptor::bind()");
     }
+    m_acceptChannel.setReadCallback([this]() { this->handleRead(); });
 }
 
 Acceptor::~Acceptor() {
+    m_acceptChannel.disableAll();
     ::close(m_acceptFd);
 }
 
@@ -47,7 +49,6 @@ void Acceptor::listen() {
     if (ret == -1) {
         SYSFATAL(logger, "Acceptor::listen()");
     }
-    m_acceptChannel.setReadCallback([this]() { this->handleRead(); });
     m_acceptChannel.enableRead();
 }
 
@@ -67,12 +68,11 @@ void Acceptor::handleRead() {
             default:
                 FATAL(logger, "unexpected accept4() error");    
         }
+    } else {
+        InetAddress peer;
+        peer.setAddress(addr);
+        m_newConnectionCallback(sockfd, m_localAddress, peer);
     }
-
-    InetAddress peer;
-    peer.setAddress(addr);
-    m_newConnectionCallback(sockfd, m_localAddress, peer);
-
 }
 
 
