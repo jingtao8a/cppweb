@@ -2,7 +2,11 @@
 #define CPPWEB_TCPSERVER_HPP
 
 #include "nocopyable.hpp"
-
+#include "TCPServerSingle.hpp"
+#include <thread>
+#include <vector>
+#include <atomic>
+#include <condition_variable>
 
 namespace CPPWEB {
 
@@ -14,11 +18,37 @@ public:
     TCPServer(EventLoop *loop, const InetAddress& local);
     ~TCPServer();
 
-    void setNumThrea(size_t n);
-    void setThreadInitCallback(const std::function<void(size_t n)>&  cb) { m_threadInitCallback = cb; }
-    void setConnectionCallback(const )
+    void setThreadInitCallback(const ThreadInitCallback&  cb) { m_threadInitCallback = cb; }
+
+    void setConnectionCallback(const ConnectionCallback& cb) { m_connectionCallback = cb; }
+    void setMessageCallback(const MessageCallback& cb) { m_messageCallback = cb; }
+    void setWriteCompleteCallback(const WriteCompleteCallback& cb) { m_writeCompleteCallback = cb; }
+    
+    void setThreadNum(size_t n);
+    void start();
 private:
-    std::function<void(size_t n)> m_threadInitCallback;
+    void startInLoop();
+    void runInThread(size_t index);
+
+private:
+    typedef std::unique_ptr<std::thread> ThreadPtr;
+
+    ThreadInitCallback m_threadInitCallback;
+    ConnectionCallback m_connectionCallback;
+    MessageCallback m_messageCallback;
+    WriteCompleteCallback m_writeCompleteCallback;
+
+    EventLoop *m_loop;
+    TCPServerSingle m_tcpServerSingle;
+    
+    std::vector<ThreadPtr> m_threadPtrList;
+    std::vector<EventLoop*> m_eventLoopList;
+    std::mutex m_mutex;
+    std::condition_variable m_cond;
+
+    std::atomic_bool m_started;
+    size_t m_threadNum;
+    InetAddress m_local;
 };
 
 }

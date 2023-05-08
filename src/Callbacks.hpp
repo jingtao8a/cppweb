@@ -31,6 +31,8 @@ typedef std::function<void()> ErrorCallback;
 //TCPServerSingle
 typedef std::function<void(const TCPConnectionPtr&)> ConnectionCallback;
 
+//ThreadPool TCPServer
+typedef std::function<void(size_t)> ThreadInitCallback;
 
 void defaultConnectionCallback(const TCPConnectionPtr& conn);
 void defaultMessageCallback(const TCPConnectionPtr& conn, Buffer& buffer);

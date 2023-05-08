@@ -13,4 +13,5 @@ add_library(cppweb STATIC
     Acceptor.cpp
     Callbacks.cpp
     TCPClient.cpp
-    Connector.cpp)
+    Connector.cpp
+    TCPServer.cpp)

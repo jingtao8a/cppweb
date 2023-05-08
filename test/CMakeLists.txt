@@ -21,3 +21,6 @@ target_link_libraries(DiscardServer cppweb)
 
 add_executable(EchoClient EchoClient.cpp)
 target_link_libraries(EchoClient cppweb)
+
+add_executable(EchoServer EchoServer.cpp)
+target_link_libraries(EchoServer cppweb)
