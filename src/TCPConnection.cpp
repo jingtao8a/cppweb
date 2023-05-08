@@ -90,7 +90,7 @@ void TCPConnection::sendInLoop(const char* data, size_t len) {
     }
 
     if (!falutError && remain > 0) {//还未将数据发完，且未出错
-        if (m_highWaterMarkCallback) {//？？？？？？？？？？？？？？
+        if (m_highWaterMarkCallback) {//为了应对客户端只发送不接收数据的情况，当发送缓存outputBuffer堆积数据超过m_highWaterMark时，调用HighWaterMark
             size_t oldLen = m_outputBuffer.readableBytes();
             size_t newLen = oldLen + remain;
             if (oldLen < m_highWaterMark && newLen >= m_highWaterMark) {

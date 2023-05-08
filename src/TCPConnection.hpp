@@ -49,8 +49,8 @@ public:
     void shutdown();
     void forceClose();
 
-    void stopRead();
-    void startRead();
+    void stopRead();//高水位问题
+    void startRead();//高水位问题
     bool isReading() { return m_channel.isReading(); }
 private:
     void sendInLoop(const std::string& message);
