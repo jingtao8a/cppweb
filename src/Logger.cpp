@@ -49,7 +49,7 @@ void Logger::log_base(const char *file, int line,
     va_start(ap, fmt);
     vsnprintf(data + i, MAXLINE - i, fmt, ap);
     va_end(ap);
-    int err = dprintf(m_fd, "%s - %s:%d\n", data, strrchr(file, '/') + 1, line);
+    int err = dprintf(m_fd, "%s - %s:%d\n", data, file, line);
     if (err == -1) {
         fprintf(stderr, "log failed");
     }
@@ -74,7 +74,7 @@ void Logger::log_sys(const char *file, int line,
     va_end(ap);
 
     dprintf(m_fd, "%s: %s - %s:%d\n",
-            data, strerror(errno), strrchr(file, '/') + 1, line);
+            data, strerror(errno), file, line);
 
     if (to_abort) {
         exit(-1);
