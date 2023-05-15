@@ -1,8 +1,8 @@
-#include "../src/Logger.hpp"
-#include "../src/Singleton.hpp"
-#include "../src/EventLoop.hpp"
-#include "../src/TCPClient.hpp"
-#include "../src/nocopyable.hpp"
+#include "cppweb/Logger.hpp"
+#include "cppweb/Singleton.hpp"
+#include "cppweb/EventLoop.hpp"
+#include "cppweb/TCPClient.hpp"
+#include "cppweb/nocopyable.hpp"
 #include <iostream>
 #include <thread>
 

@@ -1,5 +1,5 @@
-#include "../src/Logger.hpp"
-#include "../src/Singleton.hpp"
+#include "cppweb/Logger.hpp"
+#include "cppweb/Singleton.hpp"
 
 static auto& logger = CPPWEB::Singleton<CPPWEB::Logger>::GetInstance();
 

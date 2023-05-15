@@ -1,8 +1,8 @@
-#include "../src/EventLoopThread.hpp"
-#include "../src/EventLoop.hpp"
-#include "../src/Logger.hpp"
-#include "../src/Singleton.hpp"
-#include "../src/Timestamp.hpp"
+#include "cppweb/EventLoopThread.hpp"
+#include "cppweb/EventLoop.hpp"
+#include "cppweb/Logger.hpp"
+#include "cppweb/Singleton.hpp"
+#include "cppweb/Timestamp.hpp"
 #include <iostream>
 #include <unistd.h>
 

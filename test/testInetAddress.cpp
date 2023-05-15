@@ -1,4 +1,4 @@
-#include "../src/InetAddress.hpp"
+#include "cppweb/InetAddress.hpp"
 #include <iostream>
 
 int main() {

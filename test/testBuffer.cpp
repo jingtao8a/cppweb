@@ -1,4 +1,4 @@
-#include "../src/Buffer.hpp"
+#include "cppweb/Buffer.hpp"
 #include <iostream>
 #include <sys/types.h>
 #include <sys/stat.h>

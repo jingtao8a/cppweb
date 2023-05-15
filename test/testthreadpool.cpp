@@ -1,6 +1,6 @@
-#include "../src/ThreadPool.hpp"
-#include "../src/Logger.hpp"
-#include "../src/Singleton.hpp"
+#include "cppweb/ThreadPool.hpp"
+#include "cppweb/Logger.hpp"
+#include "cppweb/Singleton.hpp"
 #include <iostream>
 #include <atomic>
 #include <unistd.h>

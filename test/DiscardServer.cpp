@@ -1,9 +1,9 @@
-#include "../src/Singleton.hpp"
-#include "../src/Logger.hpp"
-#include "../src/EventLoop.hpp"
-#include "../src/TCPServerSingle.hpp"
-#include "../src/Buffer.hpp"
-#include "../src/TCPConnection.hpp"
+#include "cppweb/Singleton.hpp"
+#include "cppweb/Logger.hpp"
+#include "cppweb/EventLoop.hpp"
+#include "cppweb/TCPServerSingle.hpp"
+#include "cppweb/Buffer.hpp"
+#include "cppweb/TCPConnection.hpp"
 
 static auto& logger = CPPWEB::Singleton<CPPWEB::Logger>::GetInstance();
 
