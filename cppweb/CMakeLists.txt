@@ -15,7 +15,7 @@ add_library(cppweb STATIC
     TCPClient.cpp
     Connector.cpp
     TCPServer.cpp)
-
+target_link_libraries(cppweb pthread)
 install(TARGETS cppweb DESTINATION lib)
 
 set(HEADERS
