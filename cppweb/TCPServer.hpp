@@ -33,10 +33,10 @@ private:
 private:
     typedef std::unique_ptr<std::thread> ThreadPtr;
 
-    ThreadInitCallback m_threadInitCallback;
-    ConnectionCallback m_connectionCallback;
-    MessageCallback m_messageCallback;
-    WriteCompleteCallback m_writeCompleteCallback;
+    ThreadInitCallback m_threadInitCallback;//线程初始化函数
+    ConnectionCallback m_connectionCallback;//连接建立和关闭回调函数
+    MessageCallback m_messageCallback;//收到消息的回调函数
+    WriteCompleteCallback m_writeCompleteCallback;//发送消息后的回调函数
 
     EventLoop *m_loop;
     TCPServerSingle m_tcpServerSingle;

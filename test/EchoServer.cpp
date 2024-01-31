@@ -4,6 +4,7 @@
 #include "cppweb/TCPServer.hpp"
 #include "cppweb/Buffer.hpp"
 #include "cppweb/TCPConnection.hpp"
+#include <iostream>
 
 static auto& logger = CPPWEB::Singleton<CPPWEB::Logger>::GetInstance();
 
@@ -28,8 +29,8 @@ public:
         conn->send(str);
     }
     void Connection(const CPPWEB::TCPConnectionPtr& conn) {
-        if (conn->isDisconnected()) {
-            m_loop->quit();
+        if (conn->isConnected()) {
+            std::cout << conn->name() << " connected" << std::endl;
         }
     }
 private:

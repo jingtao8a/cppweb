@@ -52,6 +52,9 @@ public:
     void stopRead();//高水位问题
     void startRead();//高水位问题
     bool isReading() { return m_channel.isReading(); }
+
+    InetAddress getLocal() { return m_local; }
+    InetAddress getPeer() { return m_peer; }
 private:
     void sendInLoop(const std::string& message);
     void sendInLoop(const char* data, size_t len);

@@ -1,4 +1,3 @@
-
 EventLoop、TimerQueue、Epoller的关系
 
 <img src="../images/4.png"/>
@@ -39,3 +38,4 @@ void EventLoop::queueInLoop(const std::function<void()>& task) {
     wakeup();//往EventLoop的m_wakeupFd发送数据，唤醒m_wakeupFdChannel
 }
 ```
+

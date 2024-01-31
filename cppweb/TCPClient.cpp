@@ -31,8 +31,8 @@ TCPClient::~TCPClient() {
 
 void TCPClient::start() {
     m_loop->assertInLoopThread();
-    m_connector.start();//发起连接事件
     m_retryTimer = m_loop->runEvery(Nanoseconds(3000000000), [this]() {this->retry();});
+    m_connector.start();//发起连接事件
 }
 
 void TCPClient::retry() {

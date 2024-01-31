@@ -40,7 +40,7 @@ void Connector::start() {//发起连接事件
 void Connector::handleWrite() {
     m_loop->assertInLoopThread();
     if (!m_channel.isNoneEvents()) {
-        m_channel.disableAll();
+        m_channel.disableAll();//取消所有事件
     }
     int err;
     socklen_t len = sizeof(err);

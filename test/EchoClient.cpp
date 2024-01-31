@@ -62,7 +62,7 @@ private:
 
 int main() {
     CPPWEB::EventLoop loop;
-    CPPWEB::InetAddress addr("192.168.159.130", 9999);
+    CPPWEB::InetAddress addr("127.0.0.1", 9999);
     EchoBench client(&loop, addr);
     client.start();
     loop.loop();

@@ -22,9 +22,9 @@ private:
     void closeConnection(const TCPConnectionPtr& conn);//作为TCPConnection的回调函数
 
 private:
-    MessageCallback m_messageCallback;
-    WriteCompleteCallback m_writeCompleteCallback;
-    ConnectionCallback m_connectionCallback;
+    MessageCallback m_messageCallback;//收到数据的回调函数
+    WriteCompleteCallback m_writeCompleteCallback;//写回调函数
+    ConnectionCallback m_connectionCallback;//连接建立和关闭的回调函数
 
     std::unordered_set<TCPConnectionPtr> m_connectionSet;
     EventLoop* m_loop;
