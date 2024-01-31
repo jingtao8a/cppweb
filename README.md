@@ -164,12 +164,12 @@ int main() {
 
 ```
 
-结果：
+结果：<br>
 <img src="./images/11.png" height=300/>
 <img src="./images/10.png" height=200/>
 
 
 ***
 ## others:
-[TCP连接异常断开情况](./docs/TCP连接异常断开.md)
+[TCP连接异常断开情况](./docs/TCP连接异常断开.md)<br>
 [智能指针 最佳实践](./docs/智能指针_最佳实践.md)
