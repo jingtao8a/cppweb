@@ -23,7 +23,16 @@
 
 ### usage
 ```shell
-git clone 
+git clone git@github.com:jingtao8a/cppweb.git
+cd cppweb & mkdir build
+cd build & cmake ..
+make
+
+//启动EchoServer
+../bin/EchoServer
+
+//启动EchoClient
+../bin/EchoClient
 ```
 
 ### example
@@ -163,3 +172,4 @@ int main() {
 ***
 ## others:
 [TCP连接异常断开情况](./docs/TCP连接异常断开.md)
+[智能指针 最佳实践](./docs/智能指针_最佳实践.md)
